@@ -49,7 +49,7 @@ export default function WeatherWidget({
           <div>Wind</div>
           <div>
             {weather?.wind?.speed}
-            {unit === "metric" ? "km/h" : "mp/h"}
+            {unit === "metric" ? "mp/h" : "km/h"}
           </div>
         </div>
       </div>
