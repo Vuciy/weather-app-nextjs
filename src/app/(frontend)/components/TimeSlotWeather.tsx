@@ -24,7 +24,7 @@ export default function TimeSlotWeather({
         />
       </div>
       <p className="mt-1">
-        {Math.round(weather)} °{unit === "metric" ? "C" : "F"}
+        {weather && Math.round(weather)} °{unit === "metric" ? "C" : "F"}
       </p>
     </div>
   );

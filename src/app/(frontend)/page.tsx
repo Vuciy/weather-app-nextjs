@@ -27,11 +27,15 @@ export default function Home() {
   let currentTime = moment().format("HH:MM");
 
   useEffect(() => {
+    currentWeather();
+  }, [unit, selectedDay]);
+
+  const currentWeather = () => {
     getUserLocation((cord: ICoordinates) => {
       getCurrentWeather(cord);
       getDailyWeather(cord);
     });
-  }, [unit, selectedDay]);
+  };
 
   useEffect(() => {
     const savedFavoritesString = localStorage?.getItem("favoriteSearches");
@@ -82,6 +86,11 @@ export default function Home() {
 
       setCity(content);
       setWeather(content);
+    } else {
+      setCity(null);
+      setCitySaved(false);
+      setWeather(null);
+      currentWeather();
     }
   }, 1000);
 

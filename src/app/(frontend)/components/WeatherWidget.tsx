@@ -16,7 +16,8 @@ export default function WeatherWidget({
       <div className="flex justify-center text-4xl font-bold text-center">
         <div className="flex flex-col justify-center">
           <div className="">
-            {Math.round(weather?.main?.temp)}°{unit === "metric" ? "C" : "F"}{" "}
+            {weather?.main?.temp ? Math.round(weather.main.temp) : ""}°
+            {unit === "metric" ? "C" : "F"}{" "}
           </div>
         </div>
         <div className="">
