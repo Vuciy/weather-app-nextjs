@@ -195,8 +195,8 @@ export default function Home() {
       />
 
       <div className="mt-6 flex justify-evenly overflow-x-auto overflow-y-hidden">
-        {dailyWeather.map((x) => (
-          <div className="">
+        {dailyWeather.map((x, i) => (
+          <div className="" key={i}>
             <TimeSlotWeather
               {...{
                 icon: x?.weather[0]?.icon,
