@@ -3,7 +3,7 @@ import IconWedget from "./IconWedget";
 
 interface ITimeSlotWeatherProps {
   time: string;
-  weather: string;
+  weather: number;
   icon: string;
   unit: string;
 }
@@ -24,7 +24,7 @@ export default function TimeSlotWeather({
         />
       </div>
       <p className="mt-1">
-        {weather} °{unit === "metric" ? "C" : "F"}
+        {Math.round(weather)} °{unit === "metric" ? "C" : "F"}
       </p>
     </div>
   );
