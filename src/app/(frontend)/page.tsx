@@ -22,6 +22,7 @@ export default function Home() {
   const [favoritesCities, setFavoritesCities] = useState<any[]>([]);
   const [city, setCity] = useState(null);
   const [citySaved, setCitySaved] = useState(false);
+  const [citySearch, setCitySearch] = useState("");
 
   let currentDate = moment().format("MMM DD, ddd");
   let currentTime = moment().format("HH:MM");
@@ -32,8 +33,13 @@ export default function Home() {
 
   const currentWeather = () => {
     getUserLocation((cord: ICoordinates) => {
-      getCurrentWeather(cord);
-      getDailyWeather(cord);
+      if (citySearch) {
+        getCityWeather();
+        getDailyWeather();
+      } else {
+        getCurrentWeather(cord);
+        getDailyWeather(cord);
+      }
     });
   };
 
@@ -44,6 +50,18 @@ export default function Home() {
       setFavoritesCities(savedFavorites);
     }
   }, []);
+
+  useEffect(() => {
+    if (citySearch) {
+      getCityWeather();
+      getDailyWeather();
+    } else {
+      setCity(null);
+      setCitySaved(false);
+      setWeather(null);
+      currentWeather();
+    }
+  }, [citySearch]);
 
   useEffect(() => {
     localStorage.setItem("favoriteSearches", JSON.stringify(favoritesCities));
@@ -64,34 +82,30 @@ export default function Home() {
     setCitySaved(false);
   };
 
-  const debouncedChange = debounce(async (inputValue: string) => {
-    if (inputValue) {
-      const city = favoritesCities.find((x) => x.name.includes(inputValue));
+  const getCityWeather = async () => {
+    const city = favoritesCities.find((x) => x.name.includes(citySearch));
 
-      if (city) {
-        setCitySaved(true);
-        setWeather(city);
-        return;
-      }
-      const { success, content, message } = await get_weather_by_city({
-        city: inputValue,
-        units: unit,
-        dt: selectedDay?.unix,
-      });
-
-      if (!success) {
-        alert(message);
-        return;
-      }
-
-      setCity(content);
-      setWeather(content);
-    } else {
-      setCity(null);
-      setCitySaved(false);
-      setWeather(null);
-      currentWeather();
+    if (city) {
+      setCitySaved(true);
+      setWeather(city);
+      return;
     }
+    const { success, content, message } = await get_weather_by_city({
+      city: citySearch,
+      units: unit,
+      dt: selectedDay?.unix,
+    });
+
+    if (!success) {
+      alert(message);
+      return;
+    }
+
+    setCity(content);
+    setWeather(content);
+  };
+  const debouncedChange = debounce(async (inputValue: string) => {
+    setCitySearch(inputValue);
   }, 1000);
 
   const getCurrentWeather = async (cord: ICoordinates) => {
@@ -109,11 +123,12 @@ export default function Home() {
     setWeather(content);
   };
 
-  const getDailyWeather = async (cord: ICoordinates) => {
+  const getDailyWeather = async (cord: ICoordinates | null = null) => {
     const { success, content, message } = await get_daily_weather({
       lat: cord?.latitude,
-      lon: cord.longitude,
+      lon: cord?.longitude,
       units: unit,
+      city: citySearch,
     });
 
     if (!success) {

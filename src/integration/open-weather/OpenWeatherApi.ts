@@ -37,6 +37,7 @@ export const weatherByCityName = ({ city, units }: IWeatherByCityName) => {
 export const getHourlyWeather = ({
   lat,
   lon,
+  city,
   units = "standard",
 }: IGetCurrentWeather) => {
   const api = axios.create({
@@ -45,7 +46,7 @@ export const getHourlyWeather = ({
   });
 
   return api.get(
-    `/data/2.5/forecast?lat=${lat}&lon=${lon}&units=${units}&appid=${process.env.OPEN_WEATHER_API_KEY}`
+    `/data/2.5/forecast?lat=${lat}&q=${city}&lon=${lon}&units=${units}&appid=${process.env.OPEN_WEATHER_API_KEY}`
   );
 };
 

@@ -41,11 +41,13 @@ export class WeatherContoller {
     const lat = req.nextUrl.searchParams.get("lat");
     const lon = req.nextUrl.searchParams.get("lon");
     const units = req.nextUrl.searchParams.get("units");
+    const city = req.nextUrl.searchParams.get("city");
     try {
       const { weather_list } = await this.weatherService.getHourlyWeather({
         lat: `${lat}`,
         lon: `${lon}`,
         units: `${units}` as unitsType,
+        city: city ? `${city}` : "",
       });
       return NextResponse.json(
         success("Successfuly retrieved weather", weather_list),

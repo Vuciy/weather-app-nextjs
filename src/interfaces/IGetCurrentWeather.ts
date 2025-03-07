@@ -5,4 +5,5 @@ export interface IGetCurrentWeather {
   lon: string;
   dt?: string;
   units: unitsType;
+  city?: string;
 }
